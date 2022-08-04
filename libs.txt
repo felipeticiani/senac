@@ -1,0 +1,6 @@
+OpenJDK11U-jdk_x64_windows_hotspot_11.0.15_10
+hamcrest-core-1.3
+junit-4.12
+junit-4.12-sources
+lombok-1.18.12
+mysql-connector-java-8.0.23
