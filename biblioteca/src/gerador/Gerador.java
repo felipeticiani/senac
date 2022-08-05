@@ -100,21 +100,4 @@ public class Gerador {
         Collections.shuffle(cidades);
         return cidades.get(0);
     }
-    
-    public static void main(String[] args) {
-        System.out.println(gerarNumero(3));
-        System.out.println(gerarTelefoneFixo());
-        System.out.println(gerarTelefoneCelular());
-        System.out.println(gerarCpf());
-        System.out.println(gerarCnpj());
-        System.out.println(gerarCep());
-        System.out.println(gerarSenha(9));
-        System.out.println(gerarNome());
-        System.out.println(gerarSobrenome());
-        System.out.println(gerarNomeCompleto());
-        System.out.println(gerarLogin());
-        System.out.println(gerarUf());
-        System.out.println(gerarBairro());
-        System.out.println(gerarCidade());
-    }
 }

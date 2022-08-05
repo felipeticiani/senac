@@ -6,6 +6,7 @@
 package aula1;
 
 import aula1.service.Calculadora;
+import gerador.Gerador;
 import javax.swing.JOptionPane;
 
 
@@ -32,6 +33,8 @@ public class Exemplo1 {
         
         // Exercício 3
         JOptionPane.showMessageDialog(null, "Número aleatório: " + calculadora.sortearNumero());
+        
+        System.out.println(Gerador.gerarBairro());
     }
     
 }
