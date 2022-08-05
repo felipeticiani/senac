@@ -5,6 +5,9 @@
  */
 package gerador;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -53,15 +56,17 @@ public class Gerador {
     }
     
     public static String gerarNome() {
-        String[] nomes = {"Miguel", "Gabriel", "Rafael", "Lucas", "Felipe", 
-            "Alice", "Sarah", "Beatriz", "Mariana", "Isabela"};
-        return nomes[Integer.parseInt(gerarNumero(1))];
+        List<String> nomes = Arrays.asList("Miguel", "Gabriel", "Rafael", "Lucas", "Felipe", 
+            "Alice", "Sarah", "Beatriz", "Mariana", "Isabela");
+        Collections.shuffle(nomes);
+        return nomes.get(0);
     }
     
     public static String gerarSobrenome() {
-        String[] sobrenomes = {"Silva", "Santos", "Oliveira", "Souza", "Rodrigues", 
-            "Ferreira", "Alves", "Pereira", "Lima", "Gomes"};
-        return sobrenomes[Integer.parseInt(gerarNumero(1))];
+        List<String> sobrenomes = Arrays.asList("Silva", "Santos", "Oliveira", "Souza", "Rodrigues", 
+            "Ferreira", "Alves", "Pereira", "Lima", "Gomes");
+        Collections.shuffle(sobrenomes);
+        return sobrenomes.get(0);
     }
     
     public static String gerarNomeCompleto() {
@@ -73,28 +78,27 @@ public class Gerador {
     }
     
     public static String gerarUf() {
-        String[] ufs = {"AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", 
+        List<String> ufs = Arrays.asList("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", 
             "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", 
-            "RS", "RO", "RR", "SC", "SP", "SE", "TO"};
-        int i = 0;
-        do {
-            i = Integer.parseInt(gerarNumero(2));
-        } while (i > ufs.length);
-        return ufs[i];
+            "RS", "RO", "RR", "SC", "SP", "SE", "TO");
+        Collections.shuffle(ufs);
+        return ufs.get(0);
     }
     
     public static String gerarBairro() {
-        String[] bairros = {"Centro", "Capoeiras", "Trindade", "Agronômica", 
+        List<String> bairros = Arrays.asList("Centro", "Capoeiras", "Trindade", "Agronômica", 
             "Saco dos Limões", "Coqueiros", "Monte Cristo", "Balneário", 
-            "Itacorubi", "Estreito"};
-        return bairros[Integer.parseInt(gerarNumero(1))];
+            "Itacorubi", "Estreito");
+        Collections.shuffle(bairros);
+        return bairros.get(0);
     }
     
     public static String gerarCidade() {
-        String[] cidades = {"São José", "Florianópolis", "Palhoça", "Biguaçu", 
+        List<String> cidades = Arrays.asList("São José", "Florianópolis", "Palhoça", "Biguaçu", 
             "Ipumirim", "Concórdia", "Chapecó", "Lages", 
-            "São Paulo", "Rio de Janeiro"};
-        return cidades[Integer.parseInt(gerarNumero(1))];
+            "São Paulo", "Rio de Janeiro");
+        Collections.shuffle(cidades);
+        return cidades.get(0);
     }
     
     public static void main(String[] args) {
