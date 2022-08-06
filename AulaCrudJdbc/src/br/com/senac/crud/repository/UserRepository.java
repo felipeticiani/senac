@@ -29,12 +29,13 @@ public class UserRepository implements IUserRepository {
     public void save(User newUser) throws SQLException {
         try {
             db = ConnectionFactory.open();
-            sql = "INSERT INTO user VALUES (null, ?, ?, ?, ?)";
+            sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?)";
             ps = db.prepareStatement(sql);
-            ps.setString(1, newUser.getName());
-            ps.setString(2, newUser.getLogin());
-            ps.setString(3, newUser.getPassword());
-            ps.setDate(4, Date.valueOf(LocalDate.now()));
+            ps.setLong(1, newUser.getId());
+            ps.setString(2, newUser.getName());
+            ps.setString(3, newUser.getLogin());
+            ps.setString(4, newUser.getPassword());
+            ps.setDate(5, Date.valueOf(LocalDate.now()));
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error on save method.");
