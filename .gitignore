@@ -14,3 +14,4 @@ nb-configuration.xml
 *.war
 *.ear
 *.jar
+/AulaCrudJdbc/nbproject/private/
