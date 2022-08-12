@@ -14,10 +14,11 @@ import java.util.List;
  * @author felipe.ticiani
  */
 public interface IUserRepository {
-    void save(User newUser) throws SQLException;
+    Long save(User newUser) throws SQLException;
     void update(User user) throws SQLException;
     void delete(Long userId) throws SQLException;
     User findById(Long userId) throws SQLException;
     List<User> findAll() throws SQLException;
     List<User> findByName(String name) throws SQLException;
+    User findByLogin(String login) throws SQLException;
 }

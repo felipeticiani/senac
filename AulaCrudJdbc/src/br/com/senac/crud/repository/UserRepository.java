@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +27,19 @@ public class UserRepository implements IUserRepository {
     private ResultSet rs;
 
     @Override
-    public void save(User newUser) throws SQLException {
+    public Long save(User newUser) throws SQLException {
         try {
             db = ConnectionFactory.open();
-            sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?)";
-            ps = db.prepareStatement(sql);
-            ps.setLong(1, newUser.getId());
-            ps.setString(2, newUser.getName());
-            ps.setString(3, newUser.getLogin());
-            ps.setString(4, newUser.getPassword());
-            ps.setDate(5, Date.valueOf(LocalDate.now()));
+            sql = "INSERT INTO user (name, login, password, last_access) VALUES (?, ?, ?, ?)";
+            ps = db.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, newUser.getName());
+            ps.setString(2, newUser.getLogin());
+            ps.setString(3, newUser.getPassword());
+            ps.setDate(4, Date.valueOf(LocalDate.now()));
             ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+            rs.next();
+            return rs.getLong(1);
         } catch (SQLException e) {
             System.out.println("Error on save method.");
             System.out.println(e.getMessage());
@@ -87,14 +90,21 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User findById(Long userId) throws SQLException {
-        User foundUser;
+        User foundUser = new User();
         try {
             db = ConnectionFactory.open();
             sql = "SELECT * FROM user WHERE id = " + userId;
             ps = db.prepareStatement(sql);
             rs = ps.executeQuery();
-            foundUser = new User(userId, rs.getString("name"), rs.getString("login"), 
-                    rs.getString("password"), rs.getDate("last_access").toLocalDate());
+            
+            while (rs.next()) {
+                foundUser.setId(rs.getLong("id"));
+                foundUser.setName(rs.getString("name"));
+                foundUser.setLogin(rs.getString("login"));
+                foundUser.setPassword(rs.getString("password"));
+                Date dbDate = rs.getDate("last_access");
+                foundUser.setLastAccess(dbDate.toLocalDate());
+            }
             return foundUser;
         } catch (SQLException e) {
             System.out.println("Error on find by id");
@@ -146,6 +156,34 @@ public class UserRepository implements IUserRepository {
             return foundUsers;
         } catch (SQLException e) {
             System.out.println("Error on find by name.");
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            ps.close();
+            db.close();
+        }
+    }
+    
+    @Override
+    public User findByLogin(String login) throws SQLException {
+        User foundUser = new User();
+        try {
+            db = ConnectionFactory.open();
+            sql = "SELECT * FROM user WHERE login = '" + login + "'";
+            ps = db.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                foundUser.setId(rs.getLong("id"));
+                foundUser.setName(rs.getString("name"));
+                foundUser.setLogin(rs.getString("login"));
+                foundUser.setPassword(rs.getString("password"));
+                Date dbDate = rs.getDate("last_access");
+                foundUser.setLastAccess(dbDate.toLocalDate());
+            }
+            return foundUser;
+        } catch (SQLException e) {
+            System.out.println("Error on find by login");
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {

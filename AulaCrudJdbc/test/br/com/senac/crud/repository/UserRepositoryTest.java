@@ -9,6 +9,7 @@ import br.com.senac.crud.model.User;
 import gerador.Gerador;
 import java.time.LocalDate;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -20,53 +21,61 @@ public class UserRepositoryTest {
     
     private User user;
     private UserRepository repo;
+    String login;
     
     public UserRepositoryTest() {
+        login = "sarah.silva";
         repo = new UserRepository();
     }
 
     @Test
     public void testSave() throws Exception {
         // Arrange
-        user = new User(1L, Gerador.gerarNome(), Gerador.gerarLogin(),
+        repo.delete(repo.findByLogin(login).getId());
+        user = new User(null, Gerador.gerarNome(), login,
                 Gerador.gerarSenha(10), LocalDate.now());
         
         // Act
-        repo.save(user);
-        User foundUser = repo.findById(user.getId());
+        Long idGerado =  repo.save(user);
+        User foundUser = repo.findById(idGerado);
         
         // Assert
-        assertNotNull(foundUser);
         assertEquals(foundUser.getName(), user.getName());
+        assertEquals(foundUser.getLogin(), user.getLogin());
+        assertEquals(foundUser.getPassword(), user.getPassword());
+        assertEquals(foundUser.getLastAccess(), user.getLastAccess());
     }
 
     @Test
     public void testUpdate() throws Exception {
         // Arrange
-        user = new User(1L, Gerador.gerarNome(), Gerador.gerarLogin(),
+        user = new User(null, Gerador.gerarNome(), login,
                 Gerador.gerarSenha(10), LocalDate.now());
         repo.save(user);
+        user = repo.findByLogin(login);
         
         // Act
-        user.setName("New name");
+        user.setName(Gerador.gerarNome());
         repo.update(user);
-        User foundUser = repo.findById(user.getId());
+        User foundUser = repo.findByLogin(login);
         
         // Assert
         assertEquals(foundUser.getName(), user.getName());
+        assertEquals(foundUser.getLogin(), user.getLogin());
+        assertEquals(foundUser.getPassword(), user.getPassword());
+        assertEquals(foundUser.getLastAccess(), user.getLastAccess());
     }
 
     @Test
     public void testDelete() throws Exception {
         // Arrange
-        user = new User(1L, Gerador.gerarNome(), Gerador.gerarLogin(),
-                Gerador.gerarSenha(10), LocalDate.now());
-        repo.save(user);
+        user = repo.findByLogin(login);
         
         // Act
         repo.delete(user.getId());
         
         // Assert
+        
     }
 
     @Test
@@ -95,5 +104,4 @@ public class UserRepositoryTest {
         
         // Assert
     }
-    
 }

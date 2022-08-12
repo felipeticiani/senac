@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
     private static final String TIMEZONE = "?useTimezone=true&serverTimezone=America/Sao_Paulo&zeroDateTimeBehavior=convertToNull";
-    private static final String DB_NAME = "";
+    private static final String DB_NAME = "aulacrudjdbc";
     private static final String DATABASE = "jdbc:mysql://localhost:3306/" + DB_NAME + TIMEZONE;
     private static final String USERNAME = "root";
     private static final String PASSWORD = "Senac2021";
