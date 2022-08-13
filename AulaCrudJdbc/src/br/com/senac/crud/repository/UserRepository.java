@@ -45,8 +45,7 @@ public class UserRepository implements IUserRepository {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            ps.close();
-            db.close();
+            ConnectionFactory.close(db, ps, rs);
         }
     }
 
@@ -66,8 +65,7 @@ public class UserRepository implements IUserRepository {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            ps.close();
-            db.close();
+            ConnectionFactory.close(db, ps, rs);
         }
     }
 
@@ -83,22 +81,22 @@ public class UserRepository implements IUserRepository {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            ps.close();
-            db.close();
+            ConnectionFactory.close(db, ps, rs);
         }
     }
 
     @Override
     public User findById(Long userId) throws SQLException {
-        User foundUser = new User();
+        User foundUser = null;
         try {
             db = ConnectionFactory.open();
-            sql = "SELECT * FROM user WHERE id = " + userId;
+            sql = "SELECT * FROM user WHERE id = ?";
             ps = db.prepareStatement(sql);
+            ps.setLong(1, userId);
             rs = ps.executeQuery();
-            
             while (rs.next()) {
-                foundUser.setId(rs.getLong("id"));
+                foundUser =  new User();
+                foundUser.setId(userId);
                 foundUser.setName(rs.getString("name"));
                 foundUser.setLogin(rs.getString("login"));
                 foundUser.setPassword(rs.getString("password"));
@@ -111,8 +109,7 @@ public class UserRepository implements IUserRepository {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            ps.close();
-            db.close();
+            ConnectionFactory.close(db, ps, rs);
         }
     }
 
@@ -135,8 +132,7 @@ public class UserRepository implements IUserRepository {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            ps.close();
-            db.close();
+            ConnectionFactory.close(db, ps, rs);
         }
     }
 
@@ -159,8 +155,7 @@ public class UserRepository implements IUserRepository {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            ps.close();
-            db.close();
+            ConnectionFactory.close(db, ps, rs);
         }
     }
     
@@ -187,8 +182,7 @@ public class UserRepository implements IUserRepository {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         } finally {
-            ps.close();
-            db.close();
+            ConnectionFactory.close(db, ps, rs);
         }
     }
 }

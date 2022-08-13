@@ -7,6 +7,11 @@ package br.com.senac.crud.repository;
 
 import br.com.senac.crud.model.User;
 import gerador.Gerador;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.Assert;
@@ -26,6 +31,37 @@ public class UserRepositoryTest {
     public UserRepositoryTest() {
         login = "sarah.silva";
         repo = new UserRepository();
+    }
+    
+    private User getUserOnDB() throws Exception {
+        User foundUser = null;
+        Connection db = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            db = ConnectionFactory.open();
+            String sql = "SELECT * FROM user";
+            ps = db.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                foundUser =  new User();
+                foundUser.setId(rs.getLong("id"));
+                foundUser.setName(rs.getString("name"));
+                foundUser.setLogin(rs.getString("login"));
+                foundUser.setPassword(rs.getString("password"));
+                Date dbDate = rs.getDate("last_access");
+                foundUser.setLastAccess(dbDate.toLocalDate());
+            } else {
+                testSave();
+            }
+            return foundUser;
+        } catch (SQLException e) {
+            System.out.println("Error on getUserOnDB");
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionFactory.close(db, ps, rs);
+        }
     }
 
     @Test
@@ -81,10 +117,13 @@ public class UserRepositoryTest {
     @Test
     public void testFindById() throws Exception {
         // Arrange
-        
+        User savedUser = getUserOnDB();
         // Act
-        
+        User foundUser = repo.findById(savedUser.getId());
         // Assert
+        assertEquals(savedUser.getId(), foundUser.getId());
+        assertEquals(savedUser.getName(), foundUser.getName());
+        assertEquals(savedUser.getLogin(), foundUser.getLogin());
     }
 
     @Test

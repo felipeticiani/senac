@@ -7,6 +7,8 @@ package br.com.senac.crud.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -28,5 +30,11 @@ public class ConnectionFactory {
             System.out.println("Erro ao abrir conexão.");
             throw new RuntimeException(e);
         }
+    }
+    
+    public static void close(Connection db, PreparedStatement ps, ResultSet rs) throws SQLException {
+        if (rs != null) rs.close();
+         ps.close();
+         db.close();
     }
 }
