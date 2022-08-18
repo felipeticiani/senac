@@ -53,12 +53,13 @@ public class UserRepository implements IUserRepository {
     public void update(User user) throws SQLException {
         try {
             db = ConnectionFactory.open();
-            sql = "UPDATE user SET name = ?, login = ?, password = ?, last_access = ? WHERE id = " + user.getId();
+            sql = "UPDATE user SET name = ?, login = ?, password = ?, last_access = ? WHERE id = ?";
             ps = db.prepareStatement(sql);
             ps.setString(1, user.getName());
             ps.setString(2, user.getLogin());
             ps.setString(3, user.getPassword());
             ps.setDate(4, Date.valueOf(user.getLastAccess()));
+            ps.setLong(5, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error on update method.");
@@ -73,8 +74,9 @@ public class UserRepository implements IUserRepository {
     public void delete(Long userId) throws SQLException {
         try {
             db = ConnectionFactory.open();
-            sql = "DELETE FROM user WHERE id = " + userId;
+            sql = "DELETE FROM user WHERE id = ?";
             ps = db.prepareStatement(sql);
+            ps.setLong(1, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error on delete method.");
@@ -141,8 +143,9 @@ public class UserRepository implements IUserRepository {
         List<User> foundUsers = new ArrayList<>();
         try {
             db = ConnectionFactory.open();
-            sql = "SELECT * FROM user WHERE name = " + name;
+            sql = "SELECT * FROM user WHERE name = ?";
             ps = db.prepareStatement(sql);
+            ps.setString(1, name);
             rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -164,8 +167,9 @@ public class UserRepository implements IUserRepository {
         User foundUser = new User();
         try {
             db = ConnectionFactory.open();
-            sql = "SELECT * FROM user WHERE login = '" + login + "'";
+            sql = "SELECT * FROM user WHERE login = ?";
             ps = db.prepareStatement(sql);
+            ps.setString(1, login);
             rs = ps.executeQuery();
             
             while (rs.next()) {
