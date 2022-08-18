@@ -8,6 +8,7 @@ package gerador;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -99,5 +100,13 @@ public class Gerador {
             "São Paulo", "Rio de Janeiro");
         Collections.shuffle(cidades);
         return cidades.get(0);
+    }
+    
+    public static String gerarIdade() {
+        int number = new Random().nextInt(65);
+        while (number <= 18 && number >= 65) {
+            number = new Random().nextInt(65);
+        }
+        return String.valueOf(number);
     }
 }
