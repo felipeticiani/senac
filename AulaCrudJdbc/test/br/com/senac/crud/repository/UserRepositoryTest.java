@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,7 +53,9 @@ public class UserRepositoryTest {
                 Date dbDate = rs.getDate("last_access");
                 foundUser.setLastAccess(dbDate.toLocalDate());
             } else {
-                testSave();
+                repo.save(new User(null, Gerador.gerarNome(), login,
+                Gerador.gerarSenha(10), LocalDate.now()));
+                foundUser = repo.findByLogin(login);
             }
             return foundUser;
         } catch (SQLException e) {
@@ -67,13 +70,13 @@ public class UserRepositoryTest {
     @Test
     public void testSave() throws Exception {
         // Arrange
-        repo.delete(repo.findByLogin(login).getId());
         user = new User(null, Gerador.gerarNome(), login,
                 Gerador.gerarSenha(10), LocalDate.now());
         
         // Act
         Long idGerado =  repo.save(user);
         User foundUser = repo.findById(idGerado);
+        repo.delete(repo.findByLogin(login).getId());
         
         // Assert
         assertEquals(foundUser.getName(), user.getName());
@@ -94,6 +97,7 @@ public class UserRepositoryTest {
         user.setName(Gerador.gerarNome());
         repo.update(user);
         User foundUser = repo.findByLogin(login);
+        repo.delete(repo.findByLogin(login).getId());
         
         // Assert
         assertEquals(foundUser.getName(), user.getName());
@@ -105,7 +109,7 @@ public class UserRepositoryTest {
     @Test
     public void testDelete() throws Exception {
         // Arrange
-        user = repo.findByLogin(login);
+        user = getUserOnDB();
         
         // Act
         repo.delete(user.getId());
@@ -121,6 +125,7 @@ public class UserRepositoryTest {
         User savedUser = getUserOnDB();
         // Act
         User foundUser = repo.findById(savedUser.getId());
+        repo.delete(foundUser.getId());
         // Assert
         assertEquals(savedUser.getId(), foundUser.getId());
         assertEquals(savedUser.getName(), foundUser.getName());
@@ -130,18 +135,75 @@ public class UserRepositoryTest {
     @Test
     public void testFindAll() throws Exception {
         // Arrange
+        //repo.delete(repo.findByLogin(login).getId());
+        List<User> users = new ArrayList<>();
+        users.add(new User(null, Gerador.gerarNome(), login,
+                Gerador.gerarSenha(10), LocalDate.now()));
+        users.add(new User(null, Gerador.gerarNome(), Gerador.gerarLogin(),
+                Gerador.gerarSenha(10), LocalDate.now()));
         
         // Act
+        users.forEach(u -> {
+            try {
+                repo.save(u);
+            } catch(SQLException e) {
+                System.out.println("Error on save of find all test.");
+                System.out.println(e.getMessage());
+            }
+        });
+        List<User> foundUsers = repo.findAll();
+        foundUsers.forEach(u -> {
+            try {
+                repo.delete(u.getId());
+            } catch(SQLException e) {
+                System.out.println("Error on save of find all test.");
+                System.out.println(e.getMessage());
+            }
+        });
         
         // Assert
+        assertEquals(users.size(), foundUsers.size());
+        assertEquals(users.get(0).getName(), foundUsers.get(0).getName());
+        assertEquals(users.get(0).getLogin(), foundUsers.get(0).getLogin());
+        assertEquals(users.get(1).getName(), foundUsers.get(1).getName());
+        assertEquals(users.get(1).getLogin(), foundUsers.get(1).getLogin());
+        
     }
 
     @Test
     public void testFindByName() throws Exception {
         // Arrange
+        String name = Gerador.gerarNome();
+        List<User> users = new ArrayList<>();
+        users.add(new User(null, name, login,
+                Gerador.gerarSenha(10), LocalDate.now()));
+        users.add(new User(null, name, Gerador.gerarLogin(),
+                Gerador.gerarSenha(10), LocalDate.now()));
         
         // Act
+        users.forEach(u -> {
+            try {
+                repo.save(u);
+            } catch(SQLException e) {
+                System.out.println("Error on save of find all test.");
+                System.out.println(e.getMessage());
+            }
+        });
+        List<User> foundUsers = repo.findByName(name);
+        foundUsers.forEach(u -> {
+            try {
+                repo.delete(u.getId());
+            } catch(SQLException e) {
+                System.out.println("Error on save of find all test.");
+                System.out.println(e.getMessage());
+            }
+        });
         
         // Assert
+        assertEquals(users.size(), foundUsers.size());
+        assertEquals(users.get(0).getName(), foundUsers.get(0).getName());
+        assertEquals(users.get(0).getLogin(), foundUsers.get(0).getLogin());
+        assertEquals(users.get(1).getName(), foundUsers.get(1).getName());
+        assertEquals(users.get(1).getLogin(), foundUsers.get(1).getLogin());
     }
 }

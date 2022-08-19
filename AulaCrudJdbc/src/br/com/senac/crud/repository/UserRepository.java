@@ -142,9 +142,9 @@ public class UserRepository implements IUserRepository {
         List<User> foundUsers = new ArrayList<>();
         try {
             db = ConnectionFactory.open();
-            sql = "SELECT * FROM user WHERE name = ?";
+            sql = "SELECT * FROM user WHERE name LIKE ?";
             ps = db.prepareStatement(sql);
-            ps.setString(1, name);
+            ps.setString(1, "%" + name + "%");
             rs = ps.executeQuery();
             
             while (rs.next()) {
