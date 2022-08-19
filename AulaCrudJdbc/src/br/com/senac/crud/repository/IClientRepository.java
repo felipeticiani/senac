@@ -17,4 +17,5 @@ public interface IClientRepository {
     Client findById(Long id) throws SQLException;
     Client findByCpf(String cpf) throws SQLException;
     void delete(Long id) throws SQLException;
+    void update(Client client) throws SQLException;
 }

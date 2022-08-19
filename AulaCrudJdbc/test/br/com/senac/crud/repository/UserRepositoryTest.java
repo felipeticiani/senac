@@ -109,9 +109,10 @@ public class UserRepositoryTest {
         
         // Act
         repo.delete(user.getId());
+        User foundUser = repo.findByLogin(login);
         
         // Assert
-        
+        assertNull(foundUser);
     }
 
     @Test

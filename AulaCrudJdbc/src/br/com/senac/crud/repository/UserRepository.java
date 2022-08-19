@@ -74,8 +74,7 @@ public class UserRepository implements IUserRepository {
     public void delete(Long userId) throws SQLException {
         try {
             db = ConnectionFactory.open();
-            sql = "DELETE FROM user WHERE id = ?";
-            ps = db.prepareStatement(sql);
+            ps = db.prepareStatement("DELETE FROM user WHERE id = ?");
             ps.setLong(1, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -164,7 +163,7 @@ public class UserRepository implements IUserRepository {
     
     @Override
     public User findByLogin(String login) throws SQLException {
-        User foundUser = new User();
+        User foundUser = null;
         try {
             db = ConnectionFactory.open();
             sql = "SELECT * FROM user WHERE login = ?";
@@ -173,6 +172,7 @@ public class UserRepository implements IUserRepository {
             rs = ps.executeQuery();
             
             while (rs.next()) {
+                foundUser = new User();
                 foundUser.setId(rs.getLong("id"));
                 foundUser.setName(rs.getString("name"));
                 foundUser.setLogin(rs.getString("login"));

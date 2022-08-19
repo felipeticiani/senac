@@ -53,8 +53,9 @@ public class ClientRepository implements IClientRepository {
         Client foundClient = new Client();
         try {
             db = ConnectionFactory.open();
-            sql = "SELECT * FROM client WHERE id = " + id;
+            sql = "SELECT * FROM client WHERE id = ?";
             ps = db.prepareStatement(sql);
+            ps.setLong(1, id);
             rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -77,14 +78,16 @@ public class ClientRepository implements IClientRepository {
     
     @Override
     public Client findByCpf(String cpf) throws SQLException {
-        Client foundClient = new Client();
+        Client foundClient = null;
         try {
             db = ConnectionFactory.open();
-            sql = "SELECT * FROM client WHERE cpf = '" + cpf + "'";
+            sql = "SELECT * FROM client WHERE cpf = ?";
             ps = db.prepareStatement(sql);
+            ps.setString(1, cpf);
             rs = ps.executeQuery();
             
             while (rs.next()) {
+                foundClient = new Client();
                 foundClient.setId(rs.getLong("id"));
                 foundClient.setName(rs.getString("name"));
                 foundClient.setCpf(rs.getString("cpf"));
@@ -106,8 +109,9 @@ public class ClientRepository implements IClientRepository {
     public void delete(Long id) throws SQLException {
         try {
             db = ConnectionFactory.open();
-            sql = "DELETE FROM client WHERE id = " + id;
+            sql = "DELETE FROM client WHERE id = ?";
             ps = db.prepareStatement(sql);
+            ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error on delete method.");
@@ -116,6 +120,27 @@ public class ClientRepository implements IClientRepository {
         } finally {
             ps.close();
             db.close();
+        }
+    }
+    
+    @Override
+    public void update(Client client) throws SQLException {
+        try {
+            db = ConnectionFactory.open();
+            sql = "UPDATE client SET name = ?, cpf = ?, rg = ?, salary = ? WHERE id = ?";
+            ps = db.prepareStatement(sql);
+            ps.setString(1, client.getName());
+            ps.setString(2, client.getCpf());
+            ps.setString(3, client.getRg());
+            ps.setDouble(4, client.getSalary());
+            ps.setLong(5, client.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error on update method.");
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionFactory.close(db, ps, rs);
         }
     }
 }

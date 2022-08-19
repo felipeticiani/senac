@@ -20,14 +20,13 @@ public class ClientRepositoryTest {
     String cpf;
     
     public ClientRepositoryTest() {
-        cpf = Gerador.gerarCpf();
+        cpf = "321.086.064-50";
         repo = new ClientRepository();
     }
 
     @Test
     public void testSave() throws Exception {
         // Arrange
-        repo.delete(repo.findByCpf(cpf).getId());
         client = new Client(
                 null, 
                 Gerador.gerarNome(), 
@@ -44,6 +43,52 @@ public class ClientRepositoryTest {
         assertEquals(foundUser.getCpf(), client.getCpf());
         assertEquals(foundUser.getRg(), client.getRg());
         assertEquals(foundUser.getSalary(), client.getSalary());
+        repo.delete(idGerado);
+    }
+    
+    @Test
+    public void testUpdate() throws Exception {
+        // Arrange
+        client = new Client(
+                null, 
+                Gerador.gerarNome(), 
+                cpf,
+                Gerador.gerarNumero(5), 
+                1500.98);
+        Long idGerado = repo.save(client);
+        client = repo.findByCpf(cpf);
+        
+        // Act
+        client.setName(Gerador.gerarNome());
+        repo.update(client);
+        Client foundClient = repo.findByCpf(cpf);
+        
+        // Assert
+        assertEquals(foundClient.getName(), client.getName());
+        assertEquals(foundClient.getCpf(), client.getCpf());
+        assertEquals(foundClient.getRg(), client.getRg());
+        assertEquals(foundClient.getSalary(), client.getSalary());
+        repo.delete(idGerado);
+    }
+    
+    @Test
+    public void testDelete() throws Exception {
+        // Arrange
+        client = new Client(
+                null, 
+                Gerador.gerarNome(), 
+                cpf,
+                Gerador.gerarNumero(5), 
+                1500.98);
+        Long idGerado = repo.save(client);
+        client = repo.findByCpf(cpf);
+        
+        // Act
+        repo.delete(idGerado);
+        Client foundClient = repo.findByCpf(cpf);
+        
+        // Assert
+        assertNull(foundClient);
     }
     
 }
