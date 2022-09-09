@@ -6,8 +6,10 @@
 package br.com.senac.dao;
 
 import br.com.senac.entidade.Usuario;
+import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 /**
  *
@@ -20,5 +22,24 @@ public class UsuarioDaoImpl extends BaseDaoImpl<Usuario,Long> implements Usuario
         return session.find(Usuario.class, id);
     }
 
-    
+    @Override
+    public List<Usuario> pesquisarPorNome(String nome, Session session) throws HibernateException {
+        Query<Usuario> consulta = session.createQuery("FROM Usuario WHERE nome LIKE :nome");
+        consulta.setParameter("nome", "%" + nome + "%");
+        return consulta.getResultList();
+    }
+
+    @Override
+    public List<Usuario> pesquisarTodos(Session session) throws HibernateException {
+        return session.createQuery("FROM Usuario").getResultList();
+    }
+
+    @Override
+    public Usuario logar(Session session, String login, String senha) throws HibernateException {
+        Query<Usuario> consulta = session.createQuery("FROM Usuario WHERE login = :login AND senha = :senha");
+        consulta.setParameter("login", login);
+        consulta.setParameter("senha", senha);
+        return consulta.uniqueResult();
+    }
+
 }

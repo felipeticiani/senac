@@ -101,4 +101,53 @@ public class UsuarioDaoImplTest {
         assertEquals(encontrado.getNome(), usuario.getNome());
         assertEquals(encontrado.getLogin(), usuario.getLogin());
     }
+    
+    @Test
+    public void testPesquisarPorNome() {
+        // Arrange
+        buscarUsuarioBD();
+        session = HibernateUtil.abrirConexao();
+        
+        // Act
+        List<Usuario> encontrados = usuarioDao.pesquisarPorNome(usuario.getNome(), session);
+        session.close();
+        
+        // Assert
+        assertTrue(encontrados.size() > 0);
+        assertEquals(encontrados.get(0).getId(), usuario.getId());
+        assertEquals(encontrados.get(0).getNome(), usuario.getNome());
+        assertEquals(encontrados.get(0).getLogin(), usuario.getLogin());
+    }
+    
+    @Test
+    public void testPesquisarTodos() {
+        // Arrange
+        buscarUsuarioBD();
+        session = HibernateUtil.abrirConexao();
+        
+        // Act
+        List<Usuario> encontrados = usuarioDao.pesquisarTodos(session);
+        session.close();
+        
+        // Assert
+        assertTrue(encontrados.size() > 0);
+    }
+    
+    @Test
+    public void testLogar() {
+        // Arrange
+        buscarUsuarioBD();
+        session = HibernateUtil.abrirConexao();
+        
+        // Act
+        Usuario encontrado = usuarioDao.logar(session, usuario.getLogin(), usuario.getSenha());
+        session.close();
+        
+        // Assert
+        assertNotNull(encontrado);
+        assertEquals(encontrado.getId(), usuario.getId());
+        assertEquals(encontrado.getSenha(), usuario.getSenha());
+        assertEquals(encontrado.getLogin(), usuario.getLogin());
+    }
+    
 }
