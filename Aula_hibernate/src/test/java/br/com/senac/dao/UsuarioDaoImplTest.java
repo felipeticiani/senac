@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static br.com.senac.util.Gerador.*;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class UsuarioDaoImplTest {
     @Test
     public void testSalvar() {
         // Arrange
-        usuario = new Usuario(gerarNome(), gerarLogin(), gerarSenha(10));
+        usuario = new Usuario(gerarNome(), (gerarLogin() + gerarNumero(4)), gerarSenha(10));
         session = HibernateUtil.abrirConexao();
         
         // Act
@@ -130,7 +131,22 @@ public class UsuarioDaoImplTest {
         session.close();
         
         // Assert
+        imprimirUsuarios(encontrados);
         assertTrue(encontrados.size() > 0);
+    }
+    
+    private void imprimirUsuarios(List<Usuario> usuarios) {
+        usuarios.stream()
+                // se quisermos ordernar (mas o melhor é ORDER BY na query)
+                //.sorted(Comparator.comparing(Usuario::getNome))
+                //.sorted((u1, u2) -> u1.getNome().compareTo(u2.getNome()))
+                .forEach(u -> {
+            System.out.println(u.getId());
+            System.out.println(u.getNome());
+            System.out.println(u.getLogin());
+            System.out.println(u.getSenha());
+            System.out.println();
+        });
     }
     
     @Test
