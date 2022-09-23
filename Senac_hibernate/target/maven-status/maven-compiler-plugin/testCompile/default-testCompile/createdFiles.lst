@@ -1,0 +1,4 @@
+br\com\senac\dao\ProfissaoDaoImplTest.class
+br\com\senac\dao\UsuarioDaoImplTest.class
+br\com\senac\dao\PerfilDaoImplTest.class
+br\com\senac\dao\ClienteDaoImplTest.class
