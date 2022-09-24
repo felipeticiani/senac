@@ -5,17 +5,29 @@
  */
 package br.com.senac.tela;
 
+import br.com.senac.entidade.Usuario;
+
 /**
  *
  * @author felipe.ticiani
  */
 public class TelaPrincipal extends javax.swing.JFrame {
-
+    private Usuario usuario;
     /**
      * Creates new form TelaPrincipal
      */
     public TelaPrincipal() {
         initComponents();
+    }
+    
+    public TelaPrincipal(Usuario usuario) {
+        initComponents();
+        if (usuario != null && usuario.getNome().isEmpty()) {
+            lblBemVindo.setVisible(false);
+        } else {
+            this.usuario = usuario;
+            lblBemVindo.setText(lblBemVindo.getText() + usuario.getNome() + "!");
+        }
     }
 
     /**
@@ -27,41 +39,65 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblBemVindo = new javax.swing.JLabel();
+        icone_cad_usuario = new javax.swing.JLabel();
+        icone_pes_usuario = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        menu_cadastro = new javax.swing.JMenu();
+        item_cad_usuario = new javax.swing.JMenuItem();
+        item_cad_perfil = new javax.swing.JMenuItem();
+        menu_pesquisa = new javax.swing.JMenu();
+        item_pes_usuario = new javax.swing.JMenuItem();
+        item_pes_perfil = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema SENAC");
 
-        jMenu1.setText("Cadastro");
+        lblBemVindo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblBemVindo.setText("Seja bem vind@, ");
 
-        jMenuItem1.setText("Usuário");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+        icone_cad_usuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cad_usuario.png"))); // NOI18N
+        icone_cad_usuario.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        icone_cad_usuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        icone_cad_usuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                icone_cad_usuarioMouseClicked(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
 
-        jMenuItem3.setText("Perfil");
-        jMenu1.add(jMenuItem3);
+        icone_pes_usuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/pes_usuario.png"))); // NOI18N
+        icone_pes_usuario.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        icone_pes_usuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        icone_pes_usuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                icone_pes_usuarioMouseClicked(evt);
+            }
+        });
 
-        jMenuBar1.add(jMenu1);
+        menu_cadastro.setText("Cadastro");
 
-        jMenu2.setText("Pesquisa");
+        item_cad_usuario.setText("Usuário");
+        item_cad_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                item_cad_usuarioActionPerformed(evt);
+            }
+        });
+        menu_cadastro.add(item_cad_usuario);
 
-        jMenuItem2.setText("Usuário");
-        jMenu2.add(jMenuItem2);
+        item_cad_perfil.setText("Perfil");
+        menu_cadastro.add(item_cad_perfil);
 
-        jMenuItem4.setText("Perfil");
-        jMenu2.add(jMenuItem4);
+        jMenuBar1.add(menu_cadastro);
 
-        jMenuBar1.add(jMenu2);
+        menu_pesquisa.setText("Pesquisa");
+
+        item_pes_usuario.setText("Usuário");
+        menu_pesquisa.add(item_pes_usuario);
+
+        item_pes_perfil.setText("Perfil");
+        menu_pesquisa.add(item_pes_perfil);
+
+        jMenuBar1.add(menu_pesquisa);
 
         setJMenuBar(jMenuBar1);
 
@@ -69,20 +105,44 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addComponent(icone_cad_usuario)
+                .addGap(44, 44, 44)
+                .addComponent(icone_pes_usuario)
+                .addContainerGap(443, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblBemVindo)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(icone_cad_usuario)
+                    .addComponent(icone_pes_usuario))
+                .addContainerGap(260, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void item_cad_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_item_cad_usuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_item_cad_usuarioActionPerformed
+
+    private void icone_cad_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icone_cad_usuarioMouseClicked
+        new CadastroUsuario().setVisible(true);
+    }//GEN-LAST:event_icone_cad_usuarioMouseClicked
+
+    private void icone_pes_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icone_pes_usuarioMouseClicked
+        new PesquisaUsuario().setVisible(true);
+    }//GEN-LAST:event_icone_pes_usuarioMouseClicked
 
     /**
      * @param args the command line arguments
@@ -120,12 +180,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JLabel icone_cad_usuario;
+    private javax.swing.JLabel icone_pes_usuario;
+    private javax.swing.JMenuItem item_cad_perfil;
+    private javax.swing.JMenuItem item_cad_usuario;
+    private javax.swing.JMenuItem item_pes_perfil;
+    private javax.swing.JMenuItem item_pes_usuario;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JLabel lblBemVindo;
+    private javax.swing.JMenu menu_cadastro;
+    private javax.swing.JMenu menu_pesquisa;
     // End of variables declaration//GEN-END:variables
 }

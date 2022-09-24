@@ -110,7 +110,7 @@ public class Login extends javax.swing.JFrame {
         sessao.close();
         if (usuario != null) {
             JOptionPane.showMessageDialog(null, "Seja bem vind@, " + usuario.getNome() + "!");
-            new TelaPrincipal().setVisible(true);
+            new TelaPrincipal(usuario).setVisible(true);
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Login ou senha inválidos!");
