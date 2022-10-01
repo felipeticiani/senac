@@ -6,9 +6,13 @@
 package br.com.senac.tela;
 
 import br.com.senac.dao.HibernateUtil;
+import br.com.senac.dao.PerfilDao;
+import br.com.senac.dao.PerfilDaoImpl;
 import br.com.senac.dao.UsuarioDaoImpl;
+import br.com.senac.entidade.Perfil;
 import br.com.senac.entidade.Usuario;
 import br.com.senac.util.Gerador;
+import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.Session;
 
@@ -20,12 +24,14 @@ public class CadastroUsuario extends javax.swing.JFrame {
     
     private Session sessao;
     private Usuario usuario;
+    private List<Perfil> perfis;
 
     /**
      * Creates new form CadastroUsuario
      */
     public CadastroUsuario() {
         initComponents();
+        carregarComboPerfil();
     }
 
     /**
@@ -71,7 +77,12 @@ public class CadastroUsuario extends javax.swing.JFrame {
             }
         });
 
-        varComboPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        varComboPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Escolha um perfil..." }));
+        varComboPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                varComboPerfilActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,9 +117,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 .addComponent(lblCadastrarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lblNome))
+                    .addComponent(lblNome)
                     .addComponent(varNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -130,25 +139,50 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
             sessao = HibernateUtil.abrirConexao();
-            usuario = new Usuario(varNome.getText(), varLogin.getText(), Gerador.gerarSenha(5));
             if (validarFormulario()) {
+                usuario = new Usuario(varNome.getText().trim(), varLogin.getText().trim(), Gerador.gerarSenha(5));
+                usuario.setPerfil(perfis.get(varComboPerfil.getSelectedIndex()));
                 new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
                 JOptionPane.showMessageDialog(null, "Usuário salvo com sucesso!");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro ao salvar usuário!");
         } finally {
             sessao.close();
         }
-        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private boolean validarFormulario() {
-        if(varNome.getText().isEmpty() || varLogin.getText().isEmpty()) {
-            return false;
-        } else {
-            return true;
+    private void varComboPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varComboPerfilActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_varComboPerfilActionPerformed
+
+    private void carregarComboPerfil() {
+        PerfilDao perfilDao = new PerfilDaoImpl();
+        try {
+            sessao = HibernateUtil.abrirConexao();
+            perfis = perfilDao.pesquisarTodos(sessao);
+            perfis.forEach(p -> varComboPerfil.addItem(p.getNome()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sessao.close();
         }
+    }
+    
+    private boolean validarFormulario() {
+        if(varNome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o nome!");
+            return false;
+        }
+        if(varLogin.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite o login!");
+            return false;
+        }
+        if(varComboPerfil.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Selecione um perfil válido!");
+            return false;
+        }
+        return true;
     }
     /**
      * @param args the command line arguments

@@ -9,7 +9,9 @@ package br.com.senac.tela;
 import br.com.senac.dao.HibernateUtil;
 import br.com.senac.dao.UsuarioDaoImpl;
 import br.com.senac.entidade.Usuario;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import org.hibernate.Session;
 
@@ -105,15 +107,25 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
-        Session sessao = HibernateUtil.abrirConexao();
-        Usuario usuario = new UsuarioDaoImpl().logar(varLogin.getText(), String.valueOf(varSenha.getPassword()), sessao);
-        sessao.close();
-        if (usuario != null) {
-            JOptionPane.showMessageDialog(null, "Seja bem vind@, " + usuario.getNome() + "!");
-            new TelaPrincipal(usuario).setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Login ou senha inválidos!");
+        Session sessao = null;
+        try {
+            sessao = HibernateUtil.abrirConexao();
+            Usuario usuario = new UsuarioDaoImpl().logar(varLogin.getText(), String.valueOf(varSenha.getPassword()), sessao);
+            if (usuario != null) {
+                JOptionPane.showMessageDialog(null, "Seja bem vind@, " + usuario.getNome() + "!");
+                usuario.setUltimoAcesso(new Date());
+                new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
+
+                new TelaPrincipal(usuario).setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Login ou senha inválidos!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao consultar os dados!");
+            System.out.println(e.getMessage());
+        } finally {
+            sessao.close();
         }
     }//GEN-LAST:event_btnLogarActionPerformed
 
