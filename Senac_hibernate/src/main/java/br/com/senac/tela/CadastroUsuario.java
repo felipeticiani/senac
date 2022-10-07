@@ -32,6 +32,16 @@ public class CadastroUsuario extends javax.swing.JFrame {
     public CadastroUsuario() {
         initComponents();
         carregarComboPerfil();
+        btnAlterar.setVisible(false);
+    }
+    
+    public CadastroUsuario(Usuario usuario) {
+        initComponents();
+        this.usuario = usuario;
+        carregarComboPerfil();
+        carregaDadosUsuario(usuario);
+        lblTitulo.setText("Editar Usuário");
+        btnSalvar.setVisible(false);
     }
 
     /**
@@ -43,7 +53,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblCadastrarUsuario = new javax.swing.JLabel();
+        lblTitulo = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         lblLogin = new javax.swing.JLabel();
         varNome = new javax.swing.JTextField();
@@ -51,12 +61,13 @@ public class CadastroUsuario extends javax.swing.JFrame {
         lblLogin1 = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
         varComboPerfil = new javax.swing.JComboBox<>();
+        btnAlterar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblCadastrarUsuario.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        lblCadastrarUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCadastrarUsuario.setText("Cadastrar Usuário");
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitulo.setText("Cadastrar Usuário");
 
         lblNome.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblNome.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -84,11 +95,18 @@ public class CadastroUsuario extends javax.swing.JFrame {
             }
         });
 
+        btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblCadastrarUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,15 +124,16 @@ public class CadastroUsuario extends javax.swing.JFrame {
                                 .addComponent(varNome)
                                 .addComponent(varLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAlterar)
                         .addGap(66, 66, 66)))
                 .addContainerGap(72, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lblCadastrarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblNome)
@@ -128,7 +147,9 @@ public class CadastroUsuario extends javax.swing.JFrame {
                     .addComponent(lblLogin1)
                     .addComponent(varComboPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnSalvar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalvar)
+                    .addComponent(btnAlterar))
                 .addGap(0, 76, Short.MAX_VALUE))
         );
 
@@ -136,14 +157,21 @@ public class CadastroUsuario extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void carregaDadosUsuario(Usuario usuario) {
+        varNome.setText(usuario.getNome());
+        varLogin.setText(usuario.getLogin());
+        varComboPerfil.setSelectedItem(usuario.getPerfil().getNome());
+    }
+    
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
             sessao = HibernateUtil.abrirConexao();
             if (validarFormulario()) {
                 usuario = new Usuario(varNome.getText().trim(), varLogin.getText().trim(), Gerador.gerarSenha(5));
-                usuario.setPerfil(perfis.get(varComboPerfil.getSelectedIndex()));
+                usuario.setPerfil(perfis.get(varComboPerfil.getSelectedIndex() - 1));
                 new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
                 JOptionPane.showMessageDialog(null, "Usuário salvo com sucesso!");
+                this.dispose();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro ao salvar usuário!");
@@ -155,6 +183,26 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private void varComboPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_varComboPerfilActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_varComboPerfilActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        try {
+            sessao = HibernateUtil.abrirConexao();
+            if (validarFormulario()) {
+                //usuario = new Usuario(varNome.getText().trim(), varLogin.getText().trim(), Gerador.gerarSenha(5));
+                usuario.setNome(varNome.getText().trim());
+                usuario.setLogin(varLogin.getText().trim());
+                usuario.setPerfil(perfis.get(varComboPerfil.getSelectedIndex() - 1));
+                new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
+                JOptionPane.showMessageDialog(null, "Usuário salvo com sucesso!");
+                this.dispose();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao salvar usuário!");
+            System.out.println(e);
+        } finally {
+            sessao.close();
+        }
+    }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void carregarComboPerfil() {
         PerfilDao perfilDao = new PerfilDaoImpl();
@@ -220,11 +268,12 @@ public class CadastroUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JLabel lblCadastrarUsuario;
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblLogin1;
     private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JComboBox<String> varComboPerfil;
     private javax.swing.JTextField varLogin;
     private javax.swing.JTextField varNome;
