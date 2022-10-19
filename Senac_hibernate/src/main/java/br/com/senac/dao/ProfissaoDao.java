@@ -19,6 +19,9 @@ public interface ProfissaoDao extends BaseDao<Profissao, Long> {
     List<Profissao> pesquisarPorNome(String nome,
             Session sessao) throws HibernateException;
     
+    List<Profissao> pesquisarPorNomeEStatus(String nome, boolean status,
+            Session sessao) throws HibernateException;
+    
     List<Profissao> pesquisarTodos(Session sessao)
                                throws HibernateException;    
     

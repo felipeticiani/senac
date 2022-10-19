@@ -34,6 +34,17 @@ public class PerfilDaoImpl extends BaseDaoImpl<Perfil, Long>
         consulta.setParameter("nome", "%" + nome + "%");
         return consulta.getResultList();
     }
+    
+    @Override
+    public List<Perfil> pesquisarPorNomeEStatus(String nome, boolean status,
+                    Session sessao) throws HibernateException {
+        Query<Perfil> consulta = sessao
+                .createQuery("from Perfil p where "
+                        + "p.nome like :nome AND p.status = :status order by p.nome");
+        consulta.setParameter("nome", "%" + nome + "%");
+        consulta.setParameter("status", status);
+        return consulta.getResultList();
+    }
 
     @Override
     public List<Perfil> pesquisarTodos(Session sessao)

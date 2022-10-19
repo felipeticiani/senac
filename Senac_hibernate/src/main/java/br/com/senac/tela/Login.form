@@ -57,9 +57,9 @@
                   <Component id="varLogin" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblSenha" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="varSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="varSenha" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblSenha" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnLogar" min="-2" max="-2" attributes="0"/>

@@ -33,6 +33,8 @@ public class CadastroUsuario extends javax.swing.JFrame {
         initComponents();
         carregarComboPerfil();
         btnAlterar.setVisible(false);
+        lblStatus.setVisible(false);
+        varComboStatus.setVisible(false);
     }
     
     public CadastroUsuario(Usuario usuario) {
@@ -62,6 +64,8 @@ public class CadastroUsuario extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         varComboPerfil = new javax.swing.JComboBox<>();
         btnAlterar = new javax.swing.JButton();
+        lblStatus = new javax.swing.JLabel();
+        varComboStatus = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -102,32 +106,43 @@ public class CadastroUsuario extends javax.swing.JFrame {
             }
         });
 
+        lblStatus.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblStatus.setText("Status:");
+
+        varComboStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Inativo", "Ativo" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(lblLogin1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(varComboPerfil, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(varNome)
-                                .addComponent(varLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblLogin1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(varComboPerfil, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(varNome)
+                                    .addComponent(varLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(varComboStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(114, 114, 114)
                         .addComponent(btnSalvar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAlterar)
-                        .addGap(66, 66, 66)))
+                        .addComponent(btnAlterar)))
                 .addContainerGap(72, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -147,10 +162,14 @@ public class CadastroUsuario extends javax.swing.JFrame {
                     .addComponent(lblLogin1)
                     .addComponent(varComboPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblStatus)
+                    .addComponent(varComboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnAlterar))
-                .addGap(0, 76, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -161,6 +180,11 @@ public class CadastroUsuario extends javax.swing.JFrame {
         varNome.setText(usuario.getNome());
         varLogin.setText(usuario.getLogin());
         varComboPerfil.setSelectedItem(usuario.getPerfil().getNome());
+        if (usuario.getStatus()) {
+            varComboStatus.setSelectedIndex(1);
+        } else {
+            varComboStatus.setSelectedIndex(0);
+        }
     }
     
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -169,6 +193,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
             if (validarFormulario()) {
                 usuario = new Usuario(varNome.getText().trim(), varLogin.getText().trim(), Gerador.gerarSenha(5));
                 usuario.setPerfil(perfis.get(varComboPerfil.getSelectedIndex() - 1));
+                usuario.setStatus(true);
                 new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
                 JOptionPane.showMessageDialog(null, "Usuário salvo com sucesso!");
                 this.dispose();
@@ -192,6 +217,11 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 usuario.setNome(varNome.getText().trim());
                 usuario.setLogin(varLogin.getText().trim());
                 usuario.setPerfil(perfis.get(varComboPerfil.getSelectedIndex() - 1));
+                if (varComboStatus.getSelectedIndex() == 1) {
+                    usuario.setStatus(true);
+                } else {
+                    usuario.setStatus(false);
+                }
                 new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
                 JOptionPane.showMessageDialog(null, "Usuário salvo com sucesso!");
                 this.dispose();
@@ -273,8 +303,10 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblLogin1;
     private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JComboBox<String> varComboPerfil;
+    private javax.swing.JComboBox<String> varComboStatus;
     private javax.swing.JTextField varLogin;
     private javax.swing.JTextField varNome;
     // End of variables declaration//GEN-END:variables

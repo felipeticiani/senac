@@ -39,6 +39,17 @@ public class Usuario implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_perfil")
     private Perfil perfil;
+    
+    @Column(nullable = false)
+    private boolean status;
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public Usuario() {
     }

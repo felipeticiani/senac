@@ -22,13 +22,23 @@ public class UsuarioDaoImpl extends BaseDaoImpl<Usuario, Long>
     public Usuario pesquisarPorId(Long id, Session sessao) throws HibernateException {
         return sessao.find(Usuario.class, id);
     }
-
+    
     @Override
-    public List<Usuario> pesquisarPorNome(String nome, 
+    public List<Usuario> pesquisarPorNome(String nome,
             Session sessao) throws HibernateException {
         Query<Usuario> consulta = sessao
        .createQuery("FROM Usuario u WHERE u.nome LIKE :vNome");
         consulta.setParameter("vNome", "%" + nome + "%");
+        return consulta.getResultList();
+    }
+
+    @Override
+    public List<Usuario> pesquisarPorNomeEStatus(String nome, boolean status,
+            Session sessao) throws HibernateException {
+        Query<Usuario> consulta = sessao
+       .createQuery("FROM Usuario u WHERE u.nome LIKE :vNome AND u.status = :status");
+        consulta.setParameter("vNome", "%" + nome + "%");
+        consulta.setParameter("status", status);
         return consulta.getResultList();
     }
 

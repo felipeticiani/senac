@@ -19,10 +19,18 @@ import org.hibernate.Session;
  *
  * @author felipe.ticiani
  */
-public class Login extends javax.swing.JFrame {
+public class TrocarSenha extends javax.swing.JFrame {
+    
+    private Usuario usuario;
+    private Session sessao;
 
     /** Creates new form Login */
-    public Login() {
+    public TrocarSenha() {
+        initComponents();
+    }
+    
+    public TrocarSenha(Usuario usuario) {
+        this.usuario = usuario;
         initComponents();
     }
 
@@ -38,30 +46,36 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         lblSenha = new javax.swing.JLabel();
-        varLogin = new javax.swing.JTextField();
-        btnLogar = new javax.swing.JButton();
-        varSenha = new javax.swing.JPasswordField();
+        btnAlterar = new javax.swing.JButton();
+        varSenhaAtual = new javax.swing.JPasswordField();
+        lblSenha1 = new javax.swing.JLabel();
+        varNovaSenha = new javax.swing.JPasswordField();
+        varConfirmar = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Login");
+        jLabel1.setText("Alterar senha");
 
         lblUsuario.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblUsuario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblUsuario.setText("Usuário:");
+        lblUsuario.setText("Senha atual:");
 
         lblSenha.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblSenha.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblSenha.setText("Senha:");
+        lblSenha.setText("Nova senha:");
 
-        btnLogar.setText("Logar");
-        btnLogar.addActionListener(new java.awt.event.ActionListener() {
+        btnAlterar.setText("Alterar senha");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogarActionPerformed(evt);
+                btnAlterarActionPerformed(evt);
             }
         });
+
+        lblSenha1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblSenha1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSenha1.setText("Confirmar nova senha:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,66 +83,87 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAlterar)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblSenha1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(varLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(varSenha)))
-                .addContainerGap(104, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLogar)
-                .addGap(175, 175, 175))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(varConfirmar)
+                            .addComponent(varSenhaAtual, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(varNovaSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblUsuario)
-                    .addComponent(varLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(varSenhaAtual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblSenha)
+                    .addComponent(varNovaSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSenha)
-                    .addComponent(varSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(varConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSenha1))
                 .addGap(18, 18, 18)
-                .addComponent(btnLogar)
-                .addGap(0, 95, Short.MAX_VALUE))
+                .addComponent(btnAlterar)
+                .addGap(0, 53, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
-        Session sessao = null;
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         try {
             sessao = HibernateUtil.abrirConexao();
-            Usuario usuario = new UsuarioDaoImpl().logar(varLogin.getText(), String.valueOf(varSenha.getPassword()), sessao);
-            if (usuario != null) {
-                JOptionPane.showMessageDialog(null, "Seja bem vind@, " + usuario.getNome() + "!");
-                usuario.setUltimoAcesso(new Date());
+            if (validarSenhas()) {
+                usuario.setSenha(varNovaSenha.getText());
                 new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
-
-                new TelaPrincipal(usuario).setVisible(true);
+                JOptionPane.showMessageDialog(null, "Senha alterada!");
                 this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "Login ou senha inválidos!");
+                new Login().setVisible(true);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao consultar os dados!");
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao salvar usuário!");
         } finally {
             sessao.close();
         }
-    }//GEN-LAST:event_btnLogarActionPerformed
+    }//GEN-LAST:event_btnAlterarActionPerformed
 
+    private boolean validarSenhas() {
+        if(!varSenhaAtual.getText().equals(usuario.getSenha())) {
+            JOptionPane.showMessageDialog(null, "Senha atual inválida!");
+            return false;
+        }
+        if(varSenhaAtual.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite a senha atual!");
+            return false;
+        }
+        if(varNovaSenha.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite a nova senha!");
+            return false;
+        }
+        if(varConfirmar.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Confirme a nova senha!");
+            return false;
+        }
+        if(!varNovaSenha.getText().equals(varConfirmar.getText())) {
+            JOptionPane.showMessageDialog(null, "Senhas diferentes!");
+            return false;
+        }
+        return true;
+    }
     /**
      * @param args the command line arguments
      */
@@ -146,31 +181,34 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrocarSenha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrocarSenha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrocarSenha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TrocarSenha.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new TrocarSenha().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogar;
+    private javax.swing.JButton btnAlterar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblSenha;
+    private javax.swing.JLabel lblSenha1;
     private javax.swing.JLabel lblUsuario;
-    private javax.swing.JTextField varLogin;
-    private javax.swing.JPasswordField varSenha;
+    private javax.swing.JPasswordField varConfirmar;
+    private javax.swing.JPasswordField varNovaSenha;
+    private javax.swing.JPasswordField varSenhaAtual;
     // End of variables declaration//GEN-END:variables
 
 }

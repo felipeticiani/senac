@@ -41,7 +41,21 @@ public class Perfil implements Serializable {
         this.nome = nome;
         this.descricao = descricao;
     }
+    
+    public Perfil(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+    
+    private boolean status;
 
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;

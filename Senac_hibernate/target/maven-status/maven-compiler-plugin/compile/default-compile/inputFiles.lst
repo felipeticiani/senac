@@ -1,6 +1,6 @@
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\dao\UsuarioDaoImpl.java
+C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\tela\CadastroPerfil.java
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\entidade\Perfil.java
-C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\tela\Principal.java
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\dao\PerfilDaoImpl.java
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\dao\UsuarioDao.java
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\entidade\Profissao.java
@@ -18,4 +18,6 @@ C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\dao\BaseDaoImpl.java
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\dao\ProfissaoDaoImpl.java
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\dao\ClienteDaoImpl.java
+C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\tela\PesquisaPerfil.java
+C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\tela\PesquisaUsuario.java
 C:\Users\felipe.ticiani\Documents\NetBeansProjects\repo\Senac_hibernate\src\main\java\br\com\senac\util\Gerador.java

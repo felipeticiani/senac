@@ -25,25 +25,26 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jLabel1" alignment="1" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="btnAlterar" min="-2" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="lblUsuario" min="-2" pref="80" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="lblSenha1" min="-2" pref="156" max="-2" attributes="0"/>
+                          <Group type="103" alignment="1" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="lblUsuario" max="32767" attributes="0"/>
+                              <Component id="lblSenha" min="-2" pref="115" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="varLogin" min="-2" pref="200" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="lblSenha" min="-2" pref="80" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="varSenha" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="varConfirmar" alignment="1" max="32767" attributes="0"/>
+                          <Component id="varSenhaAtual" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                          <Component id="varNovaSenha" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="104" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnLogar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="175" max="-2" attributes="0"/>
+              <EmptySpace pref="66" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -51,19 +52,24 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jLabel1" min="-2" pref="70" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
-                  <Component id="varLogin" min="-2" max="-2" attributes="0"/>
+                  <Component id="varSenhaAtual" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="lblSenha" min="-2" max="-2" attributes="0"/>
+                  <Component id="varNovaSenha" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblSenha" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="varSenha" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="varConfirmar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblSenha1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnLogar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="95" max="32767" attributes="0"/>
+              <Component id="btnAlterar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="53" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -75,7 +81,7 @@
           <Font name="Segoe UI" size="24" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Login"/>
+        <Property name="text" type="java.lang.String" value="Alterar senha"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblUsuario">
@@ -84,7 +90,7 @@
           <Font name="Segoe UI" size="14" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
-        <Property name="text" type="java.lang.String" value="Usu&#xe1;rio:"/>
+        <Property name="text" type="java.lang.String" value="Senha atual:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblSenha">
@@ -93,20 +99,31 @@
           <Font name="Segoe UI" size="14" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
-        <Property name="text" type="java.lang.String" value="Senha:"/>
+        <Property name="text" type="java.lang.String" value="Nova senha:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="varLogin">
-    </Component>
-    <Component class="javax.swing.JButton" name="btnLogar">
+    <Component class="javax.swing.JButton" name="btnAlterar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Logar"/>
+        <Property name="text" type="java.lang.String" value="Alterar senha"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLogarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlterarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JPasswordField" name="varSenha">
+    <Component class="javax.swing.JPasswordField" name="varSenhaAtual">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblSenha1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="14" style="1"/>
+        </Property>
+        <Property name="horizontalAlignment" type="int" value="4"/>
+        <Property name="text" type="java.lang.String" value="Confirmar nova senha:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="varNovaSenha">
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="varConfirmar">
     </Component>
   </SubComponents>
 </Form>

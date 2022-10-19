@@ -6,8 +6,8 @@
 package br.com.senac.tela;
 
 import br.com.senac.dao.HibernateUtil;
-import br.com.senac.dao.UsuarioDaoImpl;
-import br.com.senac.entidade.Usuario;
+import br.com.senac.dao.PerfilDaoImpl;
+import br.com.senac.entidade.Perfil;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
@@ -18,16 +18,15 @@ import org.hibernate.Session;
  *
  * @author felipe.ticiani
  */
-public class PesquisaUsuario extends javax.swing.JFrame {
+public class PesquisaPerfil extends javax.swing.JFrame {
     
     private Session sessao;
-    private List<Usuario> usuarios;
-    private List<Usuario> usuariosAtivos;
+    private List<Perfil> perfis;
 
     /**
-     * Creates new form PesquisaUsuario
+     * Creates new form PesquisaPerfil
      */
-    public PesquisaUsuario() {
+    public PesquisaPerfil() {
         initComponents();
     }
 
@@ -45,7 +44,7 @@ public class PesquisaUsuario extends javax.swing.JFrame {
         varNome = new javax.swing.JTextField();
         btnPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblUsuarios = new javax.swing.JTable();
+        tblPerfis = new javax.swing.JTable();
         btnAlterar = new javax.swing.JButton();
         cbStatus = new javax.swing.JCheckBox();
 
@@ -53,7 +52,7 @@ public class PesquisaUsuario extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitulo.setText("Pesquisar Usuário");
+        lblTitulo.setText("Pesquisar Perfil");
 
         lblNome.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblNome.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -66,22 +65,22 @@ public class PesquisaUsuario extends javax.swing.JFrame {
             }
         });
 
-        tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+        tblPerfis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Nome", "Login", "Perfil", "Ultimo acesso"
+                "Nome", "Descrição"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, true, false, false
+                true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -92,13 +91,12 @@ public class PesquisaUsuario extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblUsuarios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tblUsuarios);
-        if (tblUsuarios.getColumnModel().getColumnCount() > 0) {
-            tblUsuarios.getColumnModel().getColumn(0).setMinWidth(75);
-            tblUsuarios.getColumnModel().getColumn(1).setMinWidth(75);
-            tblUsuarios.getColumnModel().getColumn(2).setMinWidth(75);
-            tblUsuarios.getColumnModel().getColumn(3).setMinWidth(75);
+        tblPerfis.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tblPerfis);
+        if (tblPerfis.getColumnModel().getColumnCount() > 0) {
+            tblPerfis.getColumnModel().getColumn(0).setMinWidth(100);
+            tblPerfis.getColumnModel().getColumn(0).setPreferredWidth(125);
+            tblPerfis.getColumnModel().getColumn(1).setMinWidth(100);
         }
 
         btnAlterar.setText("Alterar");
@@ -114,26 +112,25 @@ public class PesquisaUsuario extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTitulo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
                         .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(varNome)
+                        .addComponent(varNome, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbStatus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnPesquisar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(357, 357, 357)
-                                .addComponent(btnAlterar))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(42, 42, 42))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnAlterar, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,16 +138,16 @@ public class PesquisaUsuario extends javax.swing.JFrame {
                 .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblNome)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(varNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnPesquisar)
-                        .addComponent(cbStatus)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbStatus))
+                    .addComponent(lblNome))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnAlterar)
-                .addGap(0, 23, Short.MAX_VALUE))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         pack();
@@ -162,14 +159,14 @@ public class PesquisaUsuario extends javax.swing.JFrame {
             sessao = HibernateUtil.abrirConexao();
             if (!varNome.getText().isEmpty()) {
                 if (cbStatus.isSelected()) {
-                    usuarios = new UsuarioDaoImpl().pesquisarPorNomeEStatus(varNome.getText(), true, sessao);
+                    perfis = new PerfilDaoImpl().pesquisarPorNomeEStatus(varNome.getText(), true, sessao);
                 } else {
-                    usuarios = new UsuarioDaoImpl().pesquisarPorNome(varNome.getText(), sessao);
+                    perfis = new PerfilDaoImpl().pesquisarPorNome(varNome.getText(), sessao);
                 }
-                if (usuarios.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Nenhum usuário encontrado!");
+                if (perfis.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Nenhum perfil encontrado!");
                 } else {
-                    carregarTabelaUsuarios(usuarios);
+                    carregarTabelaPerfis(perfis);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Digite um nome para pesquisar!");
@@ -183,22 +180,21 @@ public class PesquisaUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        int linhaSelecionada = tblUsuarios.getSelectedRow();
+        int linhaSelecionada = tblPerfis.getSelectedRow();
         if (linhaSelecionada >= 0) {
-            new CadastroUsuario(usuarios.get(linhaSelecionada)).setVisible(true);
+            new CadastroPerfil(perfis.get(linhaSelecionada)).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Selecione um usuário!");
+            JOptionPane.showMessageDialog(null, "Selecione um perfil!");
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
-    private void carregarTabelaUsuarios(List<Usuario> usuarios) {
-        DefaultTableModel model = (DefaultTableModel) tblUsuarios.getModel();
+    private void carregarTabelaPerfis(List<Perfil> perfis) {
+        DefaultTableModel model = (DefaultTableModel) tblPerfis.getModel();
         model.setNumRows(0);
-        usuarios.forEach(u -> {
-            model.addRow(new Object[]{u.getNome(), u.getLogin(), u.getPerfil().getNome(), u.getUltimoAcesso()});
+        perfis.forEach(p -> {
+            model.addRow(new Object[]{p.getNome(), p.getDescricao()});
         });
     }
-    
     /**
      * @param args the command line arguments
      */
@@ -216,20 +212,20 @@ public class PesquisaUsuario extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PesquisaUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesquisaPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PesquisaUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesquisaPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PesquisaUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesquisaPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PesquisaUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesquisaPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PesquisaUsuario().setVisible(true);
+                new PesquisaPerfil().setVisible(true);
             }
         });
     }
@@ -241,7 +237,7 @@ public class PesquisaUsuario extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JTable tblUsuarios;
+    private javax.swing.JTable tblPerfis;
     private javax.swing.JTextField varNome;
     // End of variables declaration//GEN-END:variables
 }
