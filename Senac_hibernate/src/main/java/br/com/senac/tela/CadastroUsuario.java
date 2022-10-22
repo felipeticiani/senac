@@ -238,7 +238,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
         PerfilDao perfilDao = new PerfilDaoImpl();
         try {
             sessao = HibernateUtil.abrirConexao();
-            perfis = perfilDao.pesquisarTodos(sessao);
+            perfis = perfilDao.pesquisarTodosAtivos(sessao);
             perfis.forEach(p -> varComboPerfil.addItem(p.getNome()));
         } catch (Exception e) {
             System.out.println(e.getMessage());

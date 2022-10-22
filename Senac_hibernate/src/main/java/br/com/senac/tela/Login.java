@@ -112,12 +112,16 @@ public class Login extends javax.swing.JFrame {
             sessao = HibernateUtil.abrirConexao();
             Usuario usuario = new UsuarioDaoImpl().logar(varLogin.getText(), String.valueOf(varSenha.getPassword()), sessao);
             if (usuario != null) {
-                JOptionPane.showMessageDialog(null, "Seja bem vind@, " + usuario.getNome() + "!");
-                usuario.setUltimoAcesso(new Date());
-                new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
+                if (usuario.getStatus()) {
+                    JOptionPane.showMessageDialog(null, "Seja bem vind@, " + usuario.getNome() + "!");
+                    usuario.setUltimoAcesso(new Date());
+                    new UsuarioDaoImpl().salvarOuAlterar(usuario, sessao);
 
-                new TelaPrincipal(usuario).setVisible(true);
-                this.dispose();
+                    new TelaPrincipal(usuario).setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Você não possui autorização para acessar!");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Login ou senha inválidos!");
             }

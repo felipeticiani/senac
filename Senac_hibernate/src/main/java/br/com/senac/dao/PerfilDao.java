@@ -16,14 +16,13 @@ import org.hibernate.Session;
  */
 public interface PerfilDao extends BaseDao<Perfil, Long> {
 
-    List<Perfil> pesquisarPorNome(String nome,
-            Session sessao) throws HibernateException;
+    List<Perfil> pesquisarPorNome(String nome, Session sessao) throws HibernateException;
     
-    List<Perfil> pesquisarPorNomeEStatus(String nome, boolean status,
-            Session sessao) throws HibernateException;
+    List<Perfil> pesquisarPorNomeEStatus(String nome, boolean status, Session sessao) throws HibernateException;
     
-    List<Perfil> pesquisarTodos(Session sessao)
-                               throws HibernateException;
+    List<Perfil> pesquisarTodos(Session sessao) throws HibernateException;
+    
+    List<Perfil> pesquisarTodosAtivos(Session sessao) throws HibernateException;
     
     
 }

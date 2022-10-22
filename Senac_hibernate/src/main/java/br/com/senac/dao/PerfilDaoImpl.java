@@ -53,5 +53,13 @@ public class PerfilDaoImpl extends BaseDaoImpl<Perfil, Long>
                 .createQuery("from Perfil p order by p.nome");
         return consulta.getResultList();
     }
+    
+    @Override
+    public List<Perfil> pesquisarTodosAtivos(Session sessao)
+                              throws HibernateException {
+        Query<Perfil> consulta = sessao
+                .createQuery("from Perfil p where p.status = 1 order by p.nome");
+        return consulta.getResultList();
+    }
 
 }
