@@ -36,17 +36,23 @@ public class Cliente implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_profissao")
     private Profissao profissao;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_telefone")
+    private Telefone telefone;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco")
+    private Endereco endereco;
 
     public Cliente() {
     }
 
-    public Cliente(String nome, String cpf, String rg, 
-                             double salario, Profissao prof) {
+    public Cliente(String nome, String cpf, String rg, double salario) {
         this.nome = nome;
         this.cpf = cpf;
         this.rg = rg;
         this.salario = salario;
-        this.profissao = prof;
     }    
 
     public Long getId() {
@@ -83,6 +89,22 @@ public class Cliente implements Serializable {
 
     public double getSalario() {
         return salario;
+    }
+
+    public Telefone getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(Telefone telefone) {
+        this.telefone = telefone;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
     public void setSalario(double salario) {

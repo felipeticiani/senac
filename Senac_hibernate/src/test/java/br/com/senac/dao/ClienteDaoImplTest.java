@@ -6,10 +6,13 @@
 package br.com.senac.dao;
 
 import br.com.senac.entidade.Cliente;
+import br.com.senac.entidade.Endereco;
 import br.com.senac.entidade.Profissao;
+import br.com.senac.entidade.Telefone;
 import br.com.senac.util.Gerador;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -38,10 +41,30 @@ public class ClienteDaoImplTest {
         ProfissaoDao profissaoDao = new ProfissaoDaoImpl();
         profissaoDao.salvarOuAlterar(profissao, sessao);
         
-        cliente = new Cliente(Gerador.gerarNome(),
-                Gerador.gerarCpf(), Gerador.gerarNumero(5),
-                265656.36, profissao);
+        Telefone telefone = new Telefone(
+                "(48)", 
+                "9" + Gerador.gerarNumero(4) + "-" + Gerador.gerarNumero(4), 
+                "TIM", 
+                "Celular");
+        
+        Endereco endereco = new Endereco(
+                "Rua XYZ",
+                "Centro",
+                "88000000",
+                "25",
+                "Apto 1",
+                "Residencial tal",
+                "Florianopolis"
+        );
+        
+        cliente = new Cliente(
+                Gerador.gerarNome(),
+                Gerador.gerarCpf(), 
+                Gerador.gerarNumero(5),
+                265656.36);
         cliente.setProfissao(profissao);
+        cliente.setTelefone(telefone);
+        cliente.setEndereco(endereco);
 
         clienteDao.salvarOuAlterar(cliente, sessao);
         sessao.close();
@@ -52,10 +75,49 @@ public class ClienteDaoImplTest {
     public void testPesquisarPorId() {
         System.out.println("pesquisarPorId");
     }
+    
+    @Test
+    public void testAlterar() {
+        System.out.println("alterar");
+        buscarClienteBD();
+        
+        cliente.getTelefone().setNumero("9" + Gerador.gerarNumero(4) + "-" + Gerador.gerarNumero(4));
+        cliente.getEndereco().setLogradouro("Rua Nova");
+        sessao = HibernateUtil.abrirConexao();
+        clienteDao.salvarOuAlterar(cliente, sessao);
+        sessao.close();
+        
+        sessao = HibernateUtil.abrirConexao();
+        Cliente cli = clienteDao.pesquisarPorId(cliente.getId(), sessao);
+        sessao.close();
+        
+        assertEquals(cliente.getTelefone().getNumero(), cli.getTelefone().getNumero());
+        assertEquals(cliente.getEndereco().getLogradouro(), cli.getEndereco().getLogradouro());
+    }
 
 //    @Test
     public void testPesquisarPorNome() {
         System.out.println("pesquisarPorNome");
     }
 
+    public Cliente buscarClienteBD() {
+        try {
+            sessao = HibernateUtil.abrirConexao();
+            Query consulta = sessao.createQuery("from Cliente c where c.id_telefone is not null and id_endereco is not null");
+            consulta.setMaxResults(1);
+            List<Cliente> clientes = consulta.getResultList();
+            if(clientes.isEmpty()) {
+                testSalvar();
+            } else {
+                cliente = clientes.get(0);
+            }
+            consulta.getFirstResult();
+        } catch (Exception e) {
+            System.out.println("Erro no buscarClienteBD");
+        } finally {
+            sessao.close();
+        }
+        
+        return cliente;
+    }
 }
