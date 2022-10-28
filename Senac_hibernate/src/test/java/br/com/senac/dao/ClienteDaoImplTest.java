@@ -9,6 +9,7 @@ import br.com.senac.entidade.Cliente;
 import br.com.senac.entidade.Endereco;
 import br.com.senac.entidade.Profissao;
 import br.com.senac.entidade.Telefone;
+import br.com.senac.util.CepRest;
 import br.com.senac.util.Gerador;
 import java.util.List;
 import org.hibernate.Session;
@@ -47,15 +48,11 @@ public class ClienteDaoImplTest {
                 "TIM", 
                 "Celular");
         
-        Endereco endereco = new Endereco(
-                "Rua XYZ",
-                "Centro",
-                "88000000",
-                "25",
-                "Apto 1",
-                "Residencial tal",
-                "Florianopolis"
-        );
+        CepRest cepRest = new CepRest();
+        Endereco endereco = cepRest.pesquisaCep("88110612");
+        endereco.setNumero("1234");
+        endereco.setComplemento("Apto 9999");
+        endereco.setObservacao("Residencial Tal");
         
         cliente = new Cliente(
                 Gerador.gerarNome(),
@@ -74,6 +71,14 @@ public class ClienteDaoImplTest {
 //    @Test
     public void testPesquisarPorId() {
         System.out.println("pesquisarPorId");
+    }
+    
+    @Test
+    public void testPesquisarCep() {
+        CepRest cepRest = new CepRest();
+        Endereco endereco = cepRest.pesquisaCep("88110612");
+        
+        assertNotNull(endereco.getLogradouro());
     }
     
     @Test
@@ -103,7 +108,7 @@ public class ClienteDaoImplTest {
     public Cliente buscarClienteBD() {
         try {
             sessao = HibernateUtil.abrirConexao();
-            Query consulta = sessao.createQuery("from Cliente c where c.id_telefone is not null and id_endereco is not null");
+            Query consulta = sessao.createQuery("from Cliente c");
             consulta.setMaxResults(1);
             List<Cliente> clientes = consulta.getResultList();
             if(clientes.isEmpty()) {

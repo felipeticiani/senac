@@ -30,7 +30,7 @@ public class Endereco implements Serializable {
     @Column(nullable = false)
     private String bairro;
     
-    @Column(length = 8, nullable = false)
+    @Column(length = 9, nullable = false)
     private String cep;
     
     @Column(nullable = false)
@@ -43,19 +43,23 @@ public class Endereco implements Serializable {
     private String observacao;
     
     @Column(nullable = false)
-    private String cidade;
+    private String localidade;
+    
+    @Column(nullable = false)
+    private String uf;
 
     public Endereco() {
     }
 
-    public Endereco(String logradouro, String bairro, String cep, String numero, String complemento, String observacao, String cidade) {
+    public Endereco(String logradouro, String bairro, String cep, String numero, String complemento, String observacao, String cidade, String uf) {
         this.logradouro = logradouro;
         this.bairro = bairro;
         this.cep = cep;
         this.numero = numero;
         this.complemento = complemento;
         this.observacao = observacao;
-        this.cidade = cidade;
+        this.localidade = cidade;
+        this.uf = uf;
     }
 
     public Long getId() {
@@ -114,12 +118,20 @@ public class Endereco implements Serializable {
         this.observacao = observacao;
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getLocalidade() {
+        return localidade;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
     }
 
     @Override
