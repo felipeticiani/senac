@@ -5,11 +5,15 @@
  */
 package br.com.senac.tela;
 
+import br.com.senac.dao.ClienteDaoImpl;
 import br.com.senac.dao.HibernateUtil;
 import br.com.senac.dao.ProfissaoDao;
 import br.com.senac.dao.ProfissaoDaoImpl;
+import br.com.senac.entidade.Cliente;
 import br.com.senac.entidade.Endereco;
 import br.com.senac.entidade.Profissao;
+import br.com.senac.entidade.Telefone;
+import java.awt.event.FocusEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.Session;
@@ -23,6 +27,9 @@ public class CadastroCliente extends javax.swing.JFrame {
     
     private Session sessao;
     private List<Profissao> profissoes;
+    private Cliente cliente;
+    private Telefone telefone;
+    private Endereco endereco;
 
     /**
      * Creates new form CadastroCliente
@@ -31,6 +38,18 @@ public class CadastroCliente extends javax.swing.JFrame {
         initComponents();
         carregarComboProfissao();
         carregarComboTipo();
+        btnAlterar.setVisible(false);
+    }
+    
+    public CadastroCliente(Cliente cliente) {
+        initComponents();
+        this.cliente = cliente;
+        carregarComboProfissao();
+        varComboProfissao.setSelectedItem(cliente.getProfissao());
+        carregarComboTipo();
+        varComboTipo.setSelectedItem(cliente.getTelefone().getTipo());
+        btnSalvar.setVisible(false);
+        lblTitulo.setText("Editar Cliente");
     }
 
     /**
@@ -419,7 +438,7 @@ public class CadastroCliente extends javax.swing.JFrame {
         ProfissaoDao profissaoDao = new ProfissaoDaoImpl();
         try {
             sessao = HibernateUtil.abrirConexao();
-            profissoes = profissaoDao.pesquisarTodos(sessao);
+            profissoes = profissaoDao.pesquisarTodosAtivos(sessao);
             profissoes.forEach(p -> varComboProfissao.addItem(p.getNome()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -432,7 +451,7 @@ public class CadastroCliente extends javax.swing.JFrame {
         varComboTipo.addItem("Celular");
         varComboTipo.addItem("Fixo");
     }
-    
+   
     private boolean validarFormularioDadosPessoais() {
         if(varNome.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Digite o nome!");
@@ -446,15 +465,89 @@ public class CadastroCliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Digite o RG!");
             return false;
         }
+        if(varSalario.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Preencha o salário!");
+            return false;
+        }
+        
+        if(Double.parseDouble(varSalario.getText().replace(",", ".")) <= 0) {
+            JOptionPane.showMessageDialog(null, "Salário não pode ser zero!");
+            return false;
+        }
+        if(varComboProfissao.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Selecione a profissão!");
+            return false;
+        }
         return true;
     }
     
     private boolean validarFormularioTelefone() {
+        if(varTelefone.getText().trim().length() != 14) {
+            JOptionPane.showMessageDialog(null, "Digite o telefone corretamente!");
+            return false;
+        }
+        if(varTelefone.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Informe a operadora!");
+            return false;
+        }
         return true;
     }
     
     private boolean validarFormularioEndereco() {
+        if(varCEP.getText().trim().length() != 9) {
+            JOptionPane.showMessageDialog(null, "Digite o CEP corretamente!");
+            return false;
+        }
+        if(varLogradouro.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Informe o logradouro!");
+            return false;
+        }
+        if(varNumero.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Informe o número!");
+            return false;
+        }
+        if(varBairro.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Informe o bairro!");
+            return false;
+        }
+        if(varLocalidade.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Informe a localidade!");
+            return false;
+        }
+        if(varUF.getText().trim().length() != 2) {
+            JOptionPane.showMessageDialog(null, "Informe a UF corretamente!");
+            return false;
+        }
         return true;
+    }
+    
+    private Cliente popularCliente() {
+        cliente = new Cliente();
+        cliente.setNome(varNome.getText());
+        cliente.setCpf(varCPF.getText());
+        cliente.setRg(varRG.getText());
+        cliente.setSalario(Double.parseDouble(varSalario.getText().replace(",", ".")));
+        return cliente;
+    }
+    
+    private Telefone popularTelefone() {
+        telefone = new Telefone();
+        String ddd = varTelefone.getText().substring(1, 3);
+        telefone.setDdd(ddd);
+        String numero = varTelefone.getText().substring(4, 14).replace("-", "");
+        telefone.setNumero(numero);
+        telefone.setOperadora(varOperadora.getText());
+        telefone.setTipo(varComboTipo.getSelectedItem().toString());
+        return telefone;
+    }
+    
+    private Endereco popularEndereco() {
+        endereco.setLogradouro(varLogradouro.getText());
+        endereco.setNumero(varNumero.getText());
+        endereco.setComplemento(varComplemento.getText());
+        endereco.setBairro(varBairro.getText());
+        endereco.setObservacao(varObservacao.getText());
+        return endereco;
     }
     
     private boolean validarCampoCEP() {
@@ -466,24 +559,56 @@ public class CadastroCliente extends javax.swing.JFrame {
     }
     
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        
+        if (validarFormularioDadosPessoais() && validarFormularioTelefone() && validarFormularioEndereco()) {
+            try {
+                sessao = HibernateUtil.abrirConexao();
+                cliente = popularCliente();
+                cliente.setTelefone(popularTelefone());
+                cliente.setEndereco(popularEndereco());
+                cliente.setProfissao(profissoes.get(varComboProfissao.getSelectedIndex() - 1));
+                new ClienteDaoImpl().salvarOuAlterar(cliente, sessao);
+                JOptionPane.showMessageDialog(null, "Cliente salvo com sucesso!");
+                this.dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar cliente!");
+            } finally {
+                sessao.close();
+            }
+        }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        
+        if (validarFormularioDadosPessoais() && validarFormularioTelefone() && validarFormularioEndereco()) {
+            try {
+                sessao = HibernateUtil.abrirConexao();
+                cliente = popularCliente();
+                cliente.setTelefone(popularTelefone());
+                cliente.setEndereco(popularEndereco());
+                cliente.setProfissao(profissoes.get(varComboProfissao.getSelectedIndex() - 1));
+                new ClienteDaoImpl().salvarOuAlterar(cliente, sessao);
+                JOptionPane.showMessageDialog(null, "Cliente salvo com sucesso!");
+                this.dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar cliente!");
+            } finally {
+                sessao.close();
+            }
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void varCEPFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_varCEPFocusLost
         if (validarCampoCEP()) {
             CepRest cepRest = new CepRest();
-            Endereco endereco = cepRest.pesquisaCep(varCEP.getText().replace("-", ""));
+            endereco = cepRest.pesquisaCep(varCEP.getText().replace("-", ""));
             if (endereco.getLogradouro() == null) {
                 JOptionPane.showMessageDialog(null, "CEP não encontrado!");
             } else {
                 varLogradouro.setText(endereco.getLogradouro());
                 varBairro.setText(endereco.getBairro());
                 varLocalidade.setText(endereco.getLocalidade());
+                varLocalidade.setEnabled(false);
                 varUF.setText(endereco.getUf());
+                varUF.setEnabled(false);
             }
         }
     }//GEN-LAST:event_varCEPFocusLost

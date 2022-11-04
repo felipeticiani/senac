@@ -53,5 +53,13 @@ public class ProfissaoDaoImpl extends BaseDaoImpl<Profissao, Long>
                 .createQuery("from Profissao p order by p.nome");
         return consulta.getResultList();
     }
+    
+    @Override
+    public List<Profissao> pesquisarTodosAtivos(Session sessao)
+                              throws HibernateException {
+        Query<Profissao> consulta = sessao
+                .createQuery("from Profissao p where status = 1 order by p.nome");
+        return consulta.getResultList();
+    }
 
 }
