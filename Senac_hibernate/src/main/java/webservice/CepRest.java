@@ -1,4 +1,4 @@
-package br.com.senac.util;
+package webservice;
 
 import br.com.senac.entidade.Endereco;
 import com.sun.jersey.api.client.Client;

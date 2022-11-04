@@ -1,4 +1,4 @@
-package br.senac.sc.consumindoapi_viacep.util;
+package br.senac.sc.consumindoapi_viacep.webservice;
 
 import br.senac.sc.consumindoapi_viacep.entidade.Endereco;
 import com.sun.jersey.api.client.Client;

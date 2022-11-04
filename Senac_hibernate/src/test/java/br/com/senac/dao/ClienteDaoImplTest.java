@@ -9,7 +9,7 @@ import br.com.senac.entidade.Cliente;
 import br.com.senac.entidade.Endereco;
 import br.com.senac.entidade.Profissao;
 import br.com.senac.entidade.Telefone;
-import br.com.senac.util.CepRest;
+import webservice.CepRest;
 import br.com.senac.util.Gerador;
 import java.util.List;
 import org.hibernate.Session;

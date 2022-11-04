@@ -1,4 +1,4 @@
-package br.senac.sc.consumindoapi_viacep.util;
+package webservice;
 
 import com.owlike.genson.Genson;
 import com.owlike.genson.GensonBuilder;
