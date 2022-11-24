@@ -3,12 +3,15 @@ package stepdefinition;
 import cucumber.api.java.pt.Dado;
 import cucumber.api.java.pt.Então;
 import cucumber.api.java.pt.Quando;
+import util.Componentes;
 
 public class AcessarGoogle {
+
+    Componentes componentes = new Componentes();
+
     @Dado("que o usuário está com o navegador aberto")
     public void que_o_usuário_está_com_o_navegador_aberto() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new cucumber.api.PendingException();
+        componentes.inicializa();
     }
 
     @Dado("que o usuário acessou a URL www.google.com.br")
